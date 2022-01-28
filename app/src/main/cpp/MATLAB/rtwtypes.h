@@ -5,7 +5,7 @@
  *
  * rtwtypes.h
  *
- * Code generation for function 'compute_eig'
+ * Code generation for function 'compute_iva'
  *
  */
 
@@ -17,7 +17,7 @@
 
 /*=======================================================================*
  * Target hardware information
- *   Device type: ARM Compatible->ARM Cortex
+ *   Device type: ARM Compatible->ARM 10
  *   Number of bits:     char:   8    short:   16    int:  32
  *                       long:  32
  *                       native word size:  32

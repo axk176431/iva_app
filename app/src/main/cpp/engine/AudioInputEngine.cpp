@@ -24,7 +24,6 @@ bool AudioInputEngine::start() {
                 ->setSampleRate(mSampleRate)
                 ->setFramesPerDataCallback(mFramesPerBurst)
                 ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Fastest)
-                ->setContentType(oboe::Speech)
                 ->setChannelCount(mInputChannelCount);
     oboe::Result result = inBuilder.openStream(mInputStream);
 
@@ -88,6 +87,10 @@ void AudioInputEngine::onErrorBeforeClose(oboe::AudioStream * oboeStream, oboe::
 
 void AudioInputEngine::onErrorAfterClose(oboe::AudioStream * oboeStream, oboe::Result error) {
     LOGE("Input stream Error before close: %s", oboe::convertToText(error));
+}
+
+void AudioInputEngine::setFramesPerBurst(int32_t framesPerBurst) {
+    mFramesPerBurst = framesPerBurst;
 }
 
 

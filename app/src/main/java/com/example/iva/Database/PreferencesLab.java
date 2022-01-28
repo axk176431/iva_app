@@ -47,11 +47,8 @@ public class PreferencesLab {
     private static ContentValues getContentValues(Preferences preferences) {
         ContentValues values = new ContentValues();
         values.put(PreferencesTable.Cols.UUID, preferences.id.toString());
-        values.put(PreferencesTable.Cols.FRAME_SIZE, preferences.frameSize);
-        values.put(PreferencesTable.Cols.HOP_SIZE, preferences.hopSize);
         values.put(PreferencesTable.Cols.LEARNING_RATE, preferences.learningRate);
         values.put(PreferencesTable.Cols.NORMALIZATION_FACTOR, preferences.normalizationFactor);
-        values.put(PreferencesTable.Cols.PCA_SMOOTHING_FACTOR, preferences.pcaSmoothingFactor);
         return values;
     }
 

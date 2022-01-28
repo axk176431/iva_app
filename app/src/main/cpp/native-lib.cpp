@@ -8,25 +8,12 @@ static IVAProcessor *engine = nullptr;
 extern "C" {
 
 JNIEXPORT void JNICALL
-Java_com_example_iva_Audio_IVAProcessor_create(JNIEnv *env, jclass clazz, jint input_device_id,
-                                               jint input_channel_count, jint sample_rate,
-                                               jint frame_size, jint hop_size, jfloat eta,
-                                               jfloat beta, jfloat lambda) {
-    AudioParams audioParams;
-    audioParams.sampleRate = sample_rate;
-    audioParams.frameSize = frame_size;
-    audioParams.hopSize = hop_size;
-    audioParams.inputChannelCount = input_channel_count;
-    audioParams.inputDeviceId = input_device_id;
-    UserPreferences prefs;
-    prefs.audioParams = audioParams;
-    prefs.eta = eta;
-    prefs.beta = beta;
-    prefs.lambda = lambda;
+Java_com_example_iva_Audio_IVAProcessor_create(JNIEnv *env, jclass clazz,
+                          jint input_device_id, jfloat eta, jfloat beta) {
     if (engine != nullptr) {
         LOGE("Error creating audio engine, engine already created.");
     } else {
-        engine = new IVAProcessor(prefs);
+        engine = new IVAProcessor(input_device_id, eta, beta);
     }
 }
 

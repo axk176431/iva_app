@@ -27,27 +27,30 @@ set(ENGINE_SOURCES ${ENGINE_PATH}/AudioInputEngine.cpp
                    ${ENGINE_PATH}/IVAProcessor.cpp)
 
 set(BUFFERING_PATH "buffering")
-set(BUFFERING_SOURCES ${BUFFERING_PATH}/RingBuffer.cpp)
+set(BUFFERING_SOURCES ${BUFFERING_PATH}/RingBuffer.cpp
+                      ${BUFFERING_PATH}/AsyncRingBuffer.cpp)
 
 set(MATLAB_PATH "MATLAB")
-set(MATLAB_SOURCES ${MATLAB_PATH}/compute_eig.cpp
-                   ${MATLAB_PATH}/compute_eig_data.cpp
-                   ${MATLAB_PATH}/compute_eig_initialize.cpp
-                   ${MATLAB_PATH}/compute_eig_rtwutil.cpp
-                   ${MATLAB_PATH}/compute_eig_terminate.cpp
-                   ${MATLAB_PATH}/recip.cpp
+set(MATLAB_SOURCES ${MATLAB_PATH}/compute_iva.cpp
+                   ${MATLAB_PATH}/compute_iva_data.cpp
+                   ${MATLAB_PATH}/compute_iva_initialize.cpp
+                   ${MATLAB_PATH}/compute_iva_rtwutil.cpp
+                   ${MATLAB_PATH}/compute_iva_terminate.cpp
+                   ${MATLAB_PATH}/fft.cpp
+                   ${MATLAB_PATH}/flip.cpp
+                   ${MATLAB_PATH}/ifft.cpp
+                   ${MATLAB_PATH}/init_iva.cpp
+                   ${MATLAB_PATH}/pinv.cpp
                    ${MATLAB_PATH}/rt_nonfinite.cpp
                    ${MATLAB_PATH}/rtGetInf.cpp
                    ${MATLAB_PATH}/rtGetNaN.cpp
-                   ${MATLAB_PATH}/sqrt.cpp
-                   ${MATLAB_PATH}/xdlapy3.cpp
-                   ${MATLAB_PATH}/xgehrd.cpp
-                   ${MATLAB_PATH}/xgerc.cpp
-                   ${MATLAB_PATH}/xhseqr.cpp
-                   ${MATLAB_PATH}/xzggev.cpp
-                   ${MATLAB_PATH}/xzhgeqz.cpp
-                   ${MATLAB_PATH}/xzlartg.cpp
-                   ${MATLAB_PATH}/xztgevc.cpp)
+                   ${MATLAB_PATH}/svd.cpp
+                   ${MATLAB_PATH}/xdotc.cpp
+                   ${MATLAB_PATH}/xnrm2.cpp
+                   ${MATLAB_PATH}/xrot.cpp
+                   ${MATLAB_PATH}/xrotg.cpp
+                   ${MATLAB_PATH}/xswap.cpp
+        )
 
 include_directories(Eigen)
 

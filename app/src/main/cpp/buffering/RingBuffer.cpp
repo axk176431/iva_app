@@ -39,7 +39,7 @@ bool RingBuffer::overlapRead(float *readPtr, int32_t numFrames, int32_t hopSize)
     return true;
 }
 
-int32_t RingBuffer::getBufferSize() const {
+int32_t RingBuffer::getBufferSize() {
     return mBufferSize;
 }
 
@@ -51,10 +51,10 @@ int32_t RingBuffer::setBufferSize(int32_t bufferSize) {
     return mBufferSize;
 }
 
-int32_t RingBuffer::getAvailableFrames() const {
+int32_t RingBuffer::getAvailableFrames() {
     return mCount;
 }
 
-bool RingBuffer::isFull() const {
+bool RingBuffer::isFull() {
     return mCount == mBufferSize;
 }

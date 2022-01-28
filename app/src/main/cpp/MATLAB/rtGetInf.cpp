@@ -5,7 +5,7 @@
  *
  * rtGetInf.cpp
  *
- * Code generation for function 'compute_eig'
+ * Code generation for function 'compute_iva'
  *
  */
 

@@ -160,12 +160,9 @@ public class MainActivity extends PermissionActivity {
     }
 
     private void startAudioEngine() {
-//        IVAProcessor.create(this);
         PreferredMic mic = PreferredMic.get(this);
         Preferences preferences = PreferencesLab.get(this).getPreferences();
-        IVAProcessor.create(mic.getId(), mic.getChannelCount(), 16000, preferences.frameSize,
-                preferences.hopSize, preferences.learningRate, preferences.normalizationFactor,
-                preferences.pcaSmoothingFactor);
+        IVAProcessor.create(mic.getId(), preferences.learningRate, preferences.normalizationFactor);
         IVAProcessor.start();
     }
 

@@ -4,6 +4,7 @@
 
 #include <logging_macros.h>
 #include "AudioOutputEngine.h"
+#include "Constants.h"
 
 bool AudioOutputEngine::start() {
     if (mStarted) {
@@ -13,8 +14,8 @@ bool AudioOutputEngine::start() {
 
     // setup output stream parameters
     oboe::AudioStreamBuilder inBuilder;
-    (&inBuilder)->setAudioApi(mAudioApi)
-            ->setFormat(mFormat)
+    (&inBuilder)->setAudioApi(oboe::AudioApi::AAudio)
+            ->setFormat(oboe::AudioFormat::Float)
             ->setSharingMode(oboe::SharingMode::Exclusive)
             ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
             ->setDataCallback(this)
@@ -24,8 +25,7 @@ bool AudioOutputEngine::start() {
             ->setChannelCount(mOutputChannelCount)
             ->setSampleRate(mSampleRate)
             ->setFramesPerDataCallback(mFramesPerBurst)
-            ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Fastest)
-            ->setContentType(oboe::Speech);
+            ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Fastest);
     oboe::Result result = inBuilder.openStream(mOutputStream);
 
     // check if stream is setup properly

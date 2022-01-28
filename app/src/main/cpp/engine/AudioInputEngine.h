@@ -14,6 +14,7 @@ public:
     virtual void stop();
     void setSampleRate(int32_t sampleRate);
     void setInputDevice(int32_t id, int32_t channelCount);
+    void setFramesPerBurst(int32_t framesPerBurst);
 
     // callbacks
     virtual void onAudioInputReady(float *audioData, int32_t numFrames) = 0;

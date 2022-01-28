@@ -10,14 +10,8 @@
     <string name="def">Default</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
-    <string name="frame_size">Frame size</string>
-    <string name="hop_size">Hop size</string>
     <string name="learning_rate">Learning rate</string>
     <string name="normalization_factor">Normalization factor</string>
-    <string name="pca_smoothing_factor">PCA smoothing factor</string>
-    <string name="frame_size_validation">Must be integer in [64, 16,000]</string>
-    <string name="hop_size_validation">Must be integer in [1/4, 1/2] of frame size</string>
     <string name="learning_rate_validation">Must be real in (0, 1]</string>
     <string name="normalization_factor_validation">Must be real in [0, 1]</string>
-    <string name="pca_smoothing_factor_validation">Must be real in [0, 1]</string>
 </resources>

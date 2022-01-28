@@ -3,19 +3,17 @@
 //
 
 #include "AudioIOEngine.h"
+#include "Constants.h"
 #include <logging_macros.h>
-
-void AudioIOEngine::init(AudioParams audioParams) {
-    mAudioParams = audioParams;
-    RingBuffer::setBufferSize((audioParams.frameSize + audioParams.hopSize) *
-                              audioParams.inputChannelCount);
-    AudioOutputEngine::setSampleRate(audioParams.sampleRate);
-    AudioOutputEngine::setFramesPerBurst(audioParams.hopSize);
-    AudioInputEngine::setSampleRate(audioParams.sampleRate);
-    AudioInputEngine::setInputDevice(audioParams.inputDeviceId, audioParams.inputChannelCount);
-}
+#include <chrono>
 
 bool AudioIOEngine::start() {
+    inputBuffer.setBufferSize(INPUT_BUFFER_SIZE);
+    outputBuffer.setBufferSize(OUTPUT_BUFFER_SIZE);
+    AudioOutputEngine::setSampleRate(SAMPLE_RATE);
+    AudioOutputEngine::setFramesPerBurst(HOP_SIZE);
+    AudioInputEngine::setSampleRate(SAMPLE_RATE);
+    AudioInputEngine::setFramesPerBurst(HOP_SIZE);
     bool outputStarted = AudioOutputEngine::start();
     bool inputStarted = AudioInputEngine::start();
     return outputStarted && inputStarted;
@@ -28,48 +26,53 @@ void AudioIOEngine::stop() {
 }
 
 void AudioIOEngine::onAudioInputReady(float *inputData, int32_t numFrames) {
-    mMutex.lock();
+    auto t1 = std::chrono::system_clock::now();
+
+    assert(numFrames == HOP_SIZE);
+
     if (mSkipInputFrames > 0) {
         mSkipInputFrames--;
     } else {
-        RingBuffer::write(inputData, numFrames * mAudioParams.inputChannelCount);
+        inputBuffer.write(inputData, INPUT_CHANNEL_COUNT * HOP_SIZE);
+        float input[INPUT_CHANNEL_COUNT * FRAME_SIZE];
+        bool readSuccessful = inputBuffer.overlapRead(input,
+                                           INPUT_CHANNEL_COUNT * FRAME_SIZE,
+                                              INPUT_CHANNEL_COUNT * HOP_SIZE);
+        if (readSuccessful) {
+            float output[HOP_SIZE];
+            if (mChannelId > 0) {
+                if (mIsProcessorOn) {
+                    processFrame(input, output, mChannelId);
+                } else {
+                    // output unprocessed input for selected channel ID
+                    for (int i = 0; i < HOP_SIZE; i++) {
+                        output[i] = input[i * INPUT_CHANNEL_COUNT + mChannelId - 1];
+                    }
+                }
+                outputBuffer.write(output, HOP_SIZE);
+            }
+        }
     }
-    mMutex.unlock();
+
+    auto t2 = std::chrono::system_clock::now();
+    std::chrono::duration<double, std::milli> delay = t2 - t1;
+    LOGE("IVA computation delay: %f.", delay.count());
 }
 
 void AudioIOEngine::onAudioOutputReady(float *outputData, int32_t numFrames) {
-
-    assert(numFrames == mAudioParams.hopSize);
+    assert(numFrames == HOP_SIZE);
 
     // write silence to avoid glitches
     memset(outputData, 0, numFrames * sizeof(float));
 
-    mMutex.lock();
-    if (mStartWritingToOutput || RingBuffer::isFull()) {
+    if (mStartWritingToOutput || outputBuffer.isFull()) {
         mStartWritingToOutput = true;
-        int32_t inputChannelCount = mAudioParams.inputChannelCount;
-        float inputData[mAudioParams.frameSize * inputChannelCount];
-        bool isRead = RingBuffer::overlapRead(inputData,
-                mAudioParams.frameSize * inputChannelCount,
-                mAudioParams.hopSize * inputChannelCount);
-        if (isRead && mChannelId > 0) {
-            if (mIsProcessorOn) {
-                processFrame(inputData, outputData, mChannelId);
-            } else {
-                // output unprocessed input for selected channel ID
-                for (int i = 0; i < mAudioParams.hopSize; i++) {
-                    outputData[i] = inputData[i * inputChannelCount + mChannelId - 1];
-                }
-            }
-        }
+        outputBuffer.read(outputData, numFrames);
     }
-    mMutex.unlock();
 }
 
 void AudioIOEngine::setActiveInputChannel(int32_t channelId) {
-    mMutex.lock();
     mChannelId = channelId;
-    mMutex.unlock();
 }
 
 void AudioIOEngine::setIsProcessorOn(bool isProcessorOn) {

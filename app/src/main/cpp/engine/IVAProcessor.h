@@ -6,41 +6,21 @@
 #define IVA_IVAPROCESSOR_H
 
 #include "AudioIOEngine.h"
+#include "Constants.h"
 #include <rtwtypes.h>
-
-struct UserPreferences {
-    AudioParams audioParams;
-    float eta;
-    float beta;
-    float lambda;
-};
-
-static const int NUM_SOURCES = 2;
-static const int NUM_OBS = 3;
-static const int FRAME_SIZE = 512;
-static const int K = FRAME_SIZE / 2 + 1;
 
 class IVAProcessor : public AudioIOEngine {
 
 public:
-    IVAProcessor(UserPreferences prefs);
-    virtual ~IVAProcessor();
+    IVAProcessor(int32_t inputDeviceId, float eta, float beta);
     virtual void processFrame(float *input, float *output, int32_t source) override;
 
 private:
-    UserPreferences mPrefs;
-    float eta = 0.1;
-    float beta = 0.5;
-    float lambda = 0.995;
+    float mEta = 0.1;
+    float mBeta = 0.75;
     float y[FRAME_SIZE];
-    creal32_T G[NUM_SOURCES * NUM_SOURCES * K];
+    creal32_T G[2 * 2 * K];
     float xi[K];
-    creal32_T mean_X[NUM_OBS * K];
-    creal32_T C_X[NUM_OBS * NUM_OBS * K];
-//
-//    creal32_T A[9];
-//    creal32_T V[9];
-//    creal32_T D[9];
 };
 
 #endif //IVA_IVAPROCESSOR_H

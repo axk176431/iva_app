@@ -7,20 +7,19 @@
 
 #include <oboe/Oboe.h>
 
-const int32_t CAPACITY = 48000;
+const int32_t CAPACITY = 2048;
 
 class RingBuffer {
 
 public:
 
-    int32_t read(float* readPtr, int32_t numFrames);
-    int32_t write(const float* writePtr, int32_t numFrames);
-    bool overlapRead(float* readPtr, int32_t numFrames, int32_t overlap);
-
-    int32_t getBufferSize() const;
-    int32_t setBufferSize(int32_t bufferSize);
-    int32_t getAvailableFrames() const;
-    bool isFull() const;
+    virtual int32_t read(float* readPtr, int32_t numFrames);
+    virtual int32_t write(const float* writePtr, int32_t numFrames);
+    virtual bool overlapRead(float* readPtr, int32_t numFrames, int32_t hopSize);
+    virtual int32_t getBufferSize();
+    virtual int32_t setBufferSize(int32_t bufferSize);
+    virtual int32_t getAvailableFrames();
+    virtual bool isFull();
 
 private:
     int32_t mHead = 0;

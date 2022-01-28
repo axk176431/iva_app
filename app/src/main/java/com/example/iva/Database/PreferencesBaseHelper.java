@@ -22,11 +22,8 @@ public class PreferencesBaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + PreferencesTable.NAME + "(" +
                 "_id integer primary key autoincrement, " +
                 PreferencesTable.Cols.UUID + ", " +
-                PreferencesTable.Cols.FRAME_SIZE + ", " +
-                PreferencesTable.Cols.HOP_SIZE + ", " +
                 PreferencesTable.Cols.LEARNING_RATE + ", " +
-                PreferencesTable.Cols.NORMALIZATION_FACTOR + ", " +
-                PreferencesTable.Cols.PCA_SMOOTHING_FACTOR + ")"
+                PreferencesTable.Cols.NORMALIZATION_FACTOR  + ")"
         );
     }
 
